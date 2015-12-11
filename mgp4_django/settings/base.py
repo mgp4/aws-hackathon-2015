@@ -13,17 +13,24 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(
+    os.path.dirname(
+        os.path.dirname(
+            os.path.abspath(__file__)
+        )
+    )
+)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'l8m4i9##hp)5$zy4p@7u+kpc0l8=&30@piwne!*3qtg)usu+0*'
+if 'SECRET_KEY' in os.environ:
+    SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -37,6 +44,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'storages',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -99,4 +108,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_URL = '/static/'
+STATICFILES_LOCATION = 'static'
+STATIC_URL = '/%s/' % STATICFILES_LOCATION
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'front_end/static')]
+
+MEDIAFILES_LOCATION = 'media'
+MEDIA_URL = '/%s/' % MEDIAFILES_LOCATION
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
