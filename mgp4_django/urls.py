@@ -1,5 +1,7 @@
+from django.core.urlresolvers import reverse_lazy
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.views.generic import RedirectView
 
 urlpatterns = [
     # Examples:
@@ -8,4 +10,5 @@ urlpatterns = [
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^transport/', include('transport.urls', namespace='transport')),
+    url(r'^$', RedirectView.as_view(url=reverse_lazy('transport:map'))),
 ]
