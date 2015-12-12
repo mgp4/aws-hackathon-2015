@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.core.cache import cache
 from datetime import datetime
 from django.db import models
 
@@ -232,8 +233,8 @@ class StopTime(models.Model):
 
 
 class TripManager(Manager):
-    csv_id = 'trip_id'
     csv_mapping = {
+        'id': 'trip_id',
         'route_id': 'route_id',
         'short_name': 'trip_short_name',
         'buyable': bool_field('buyable'),
@@ -241,6 +242,11 @@ class TripManager(Manager):
         'bike': bool_field('bike'),
         'description': 'trip_desc',
     }
+
+    def get_or_create_csv(self, csv):
+        trip = super().get_or_create_csv(csv)
+        cache.delete('trip_%d_stops' % trip.id)
+        return trip
 
 
 class Trip(models.Model):
