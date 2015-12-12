@@ -45,13 +45,26 @@ function initMap() {
     });
     */
 
-    var heatmapData = [];
-
-    $.ajax({
+    /*$.ajax({
 	type : "POST",
 	url: "https://4ou124v4td.execute-api.eu-west-1.amazonaws.com/prod/dynamodb",
 	data : '{"operation": "list", "tableName": "places", "payload": {}}'
 	}).done(function (data) {
+	*/
+
+    var heatmapData = [];
+    var myItems;
+
+    $(document).ready(function() {
+	var MyItems;
+
+    $.getJSON("127.0.0.1:8888/cities", function(data) {
+	myItems = data.items;
+	console.log(MyItems);
+	});
+    });
+
+/*
 	    var cities = data;
 	// TODO Obalit do smycky prochazejici vysledek
 		var latLng = new google.maps.LatLng(data.lat, data.lng);
@@ -62,6 +75,7 @@ function initMap() {
 
        var heatmap = new google.maps.visualization.HeatmapLayer({ data: heatmapData, radius: 10 });
        heatmap.setMap(map);
+       */
 }
 
 
