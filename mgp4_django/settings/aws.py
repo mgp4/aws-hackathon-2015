@@ -1,6 +1,6 @@
 import os
 
-from .base import STATICFILES_LOCATION, MEDIAFILES_LOCATION
+from .base import CACHES, STATICFILES_LOCATION, MEDIAFILES_LOCATION
 
 
 if 'AWS_ACCES_KEY_ID' in os.environ:
@@ -18,6 +18,9 @@ if 'RDS_DB_NAME' in os.environ:
             'PORT': os.environ['RDS_PORT'],
         }
     }
+
+if 'CACHE_LOCATION' in os.environ:
+    CACHES['default']['LOCATION'] = os.environ['CACHE_LOCATION']
 
 if 'S3_BUCKET_NAME' in os.environ:
     AWS_STORAGE_BUCKET_NAME = os.environ['S3_BUCKET_NAME']
