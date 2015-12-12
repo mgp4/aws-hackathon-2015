@@ -10,5 +10,6 @@ urlpatterns = [
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^transport/', include('transport.urls', namespace='transport')),
+    url(r'^places/', include('places.urls', namespace='places')),
     url(r'^$', RedirectView.as_view(url=reverse_lazy('transport:map'))),
 ]

@@ -21,7 +21,7 @@ path.py==8.1.2
 pathspec==0.3.3
 pexpect==4.0.1
 pickleshare==0.5
-psycopg2==2.6.1
+#psycopg2==2.6.1
 ptyprocess==0.5
 pyasn1==0.1.9
 python-dateutil==2.4.2
