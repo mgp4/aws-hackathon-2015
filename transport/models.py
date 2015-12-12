@@ -166,10 +166,10 @@ class StopManager(Manager):
         'name': 'stop_name',
         #'lat': 'stop_lat',
         #'lon': 'stop_lon',
-        'wheelchair_boarding': 'wheelchair_boarding',
-        'border': 'border',
+        'wheelchair_boarding': bool_field('wheelchair_boarding'),
+        'border': bool_field('border'),
         'description': 'stop_desc',
-        'gps_of_city': 'gps_of_city',
+        'gps_of_city': bool_field('gps_of_city'),
         'timezone': 'stop_timezone',
         'district': 'stop_district',
         'region': 'stop_region',
@@ -186,13 +186,13 @@ class Stop(models.Model):
     # stop_lon =
     wheelchair_boarding = models.BooleanField()
     border = models.BooleanField()
-    stop_description = models.TextField()
+    description = models.TextField()
     gps_of_city = models.BooleanField()
-    stop_timezone = models.CharField(max_length=20)
-    stop_district = models.CharField(max_length=50)
-    stop_region = models.CharField(max_length=50)
-    stop_country = models.CharField(max_length=30)
-    stop_city = models.CharField(max_length=100)
+    timezone = models.CharField(max_length=20)
+    district = models.CharField(max_length=50)
+    region = models.CharField(max_length=50)
+    country = models.CharField(max_length=30)
+    city = models.CharField(max_length=100)
 
     def __str__(self):
         return str(self.name)

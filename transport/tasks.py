@@ -41,3 +41,4 @@ def parse_extracted():
                     target.objects.get_or_create_csv(row)
                 except Exception as e:
                     print(row)
+                    print(e)
