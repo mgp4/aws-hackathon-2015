@@ -26,7 +26,7 @@ class Manager(models.Manager):
     def get_or_create_csv(self, csv):
         if 'id' in self.csv_mapping:
             try:
-                return self.get(id=csv[self.csv_mapping['id']])
+                return self.get(id=int(csv[self.csv_mapping['id']]))
             except models.ObjectDoesNotExist:
                 pass
         return self.create(**self._map_csv(csv))
