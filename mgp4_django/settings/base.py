@@ -39,6 +39,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = (
     'transport',
+    'places',
 
     'django.contrib.admin',
     'django.contrib.auth',
