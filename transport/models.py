@@ -123,7 +123,8 @@ class DepartmentManager(Manager):
 class Department(models.Model):
     objects = DepartmentManager()
 
-    agency = models.ForeignKey('Agency', related_name='departments')
+    agency = models.ForeignKey('Agency', related_name='departments',
+                               db_constraint=False)
     name = models.CharField(max_length=255)
     url = models.URLField()
     timezone = models.CharField(max_length=20)
@@ -149,7 +150,8 @@ class RouteManager(Manager):
 class Route(models.Model):
     objects = RouteManager()
 
-    agency = models.ForeignKey('Agency', related_name='routes')
+    agency = models.ForeignKey('Agency', related_name='routes',
+                               db_constraint=False)
     short_name = models.CharField(max_length=50)
     long_name = models.CharField(max_length=255)
     type = models.PositiveSmallIntegerField()
@@ -214,10 +216,12 @@ class StopTimeManager(Manager):
 class StopTime(models.Model):
     objects = StopTimeManager()
 
-    trip = models.ForeignKey('Trip', related_name='stop_times')
+    trip = models.ForeignKey('Trip', related_name='stop_times',
+                             db_constraint=False)
     arrival_time = models.TimeField()
     departure_time = models.TimeField()
-    stop = models.ForeignKey('Stop', related_name='stop_times')
+    stop = models.ForeignKey('Stop', related_name='stop_times',
+                             db_constraint=False)
     sequence = models.PositiveSmallIntegerField()
     pickup_type = models.PositiveSmallIntegerField()
     drop_off_type = models.PositiveSmallIntegerField()
