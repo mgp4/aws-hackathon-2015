@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style type="text/css">
+            html, body { height: 100%; margin: 0; padding: 0; }
+            #map { height: 100%; }
+        </style>
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    </head>
+
+    <body>
+        <div id="map"></div>
+
+        <script type="text/javascript">
+
+function initMap() {
+    var map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 49.636, lng: 18.148},
+        zoom: 6,
+    });
+
+    $.ajax({
+        url: "{% url 'transport:source' %}",
+        timeout: 60000,
+    }).done(function (data) {
+        var routes = data;
+        $.each(routes, function (_, stops) {
+            var path = [];
+            $.each(stops, function(_, stop) {
+                path.push({
+                    lat: parseFloat(stop[0]),
+                    lng: parseFloat(stop[1])
+                });
+            });
+            var polyline = new google.maps.Polyline({
+                path: path,
+                geodesic: true,
+                strokeColor: '#FF0000',
+                strokeOpacity: 1.0,
+                strokeWeight: 2,
+            });
+            polyline.setMap(map);
+        });
+    });
+
+    var heatmapData = [];
+
+    $.ajax({
+	type : "POST",
+	url: "https://4ou124v4td.execute-api.eu-west-1.amazonaws.com/prod/dynamodb",
+	data : '{"operation": "list", "tableName": "places", "payload": {}}'
+	}).done(function (data) {
+	    var cities = data;
+	// TODO Obalit do smycky prochazejici vysledek
+		var latLng = new google.maps.LatLng(data.lat, data.lng);
+		var weight = data.total;
+		hetmapData.push({location: latLng, weight});
+
+	});
+
+       var heatmap = new google.maps.visualization.HeatmapLayer({ data: heatmapData, radius: 10 });
+       heatmap.setMap(map);
+}
+
+
+    //  var heatmapData = [
+    //	  {location: new google.maps.LatLng(49.636, 18.148), weight : 9000}, // Pribor
+    //	  {location: new google.maps.LatLng(49.6, 18.168), weight : 19000}, // Koprivnice
+    //	  {location: new google.maps.LatLng(49.593, 18.07), weight : 900}, //Rybi
+    //	  {location: new google.maps.LatLng(49.590, 18.025), weight : 23000} //NJ
+    //	];
+
+    //var cities_json = {};
+    //var heatmapData = [];
+
+    //$.each(cities_json, function (key, data) {	//heatmap
+    //	var latLng = new google.maps.LatLng(data.lat, data.lng);
+    //	var weight = data.total;
+    //
+    //	hetmapData.push({location: latLng, weight});
+    //}
+
+
+//}
+
+        </script>
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJ6hwQV3uxt2j-eh-pwHGtWwwgOfBDDfg&libraries=visualization&callback=initMap">
+        </script>
+    </body>
+</html>
