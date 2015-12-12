@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.core.cache import cache
 from datetime import datetime
 from django.db import models
 
@@ -25,7 +26,7 @@ class Manager(models.Manager):
     def get_or_create_csv(self, csv):
         if 'id' in self.csv_mapping:
             try:
-                return self.get(id=csv[self.csv_mapping['id']])
+                return self.get(id=int(csv[self.csv_mapping['id']]))
             except models.ObjectDoesNotExist:
                 pass
         return self.create(**self._map_csv(csv))
@@ -123,7 +124,8 @@ class DepartmentManager(Manager):
 class Department(models.Model):
     objects = DepartmentManager()
 
-    agency = models.ForeignKey('Agency', related_name='departments')
+    agency = models.ForeignKey('Agency', related_name='departments',
+                               db_constraint=False)
     name = models.CharField(max_length=255)
     url = models.URLField()
     timezone = models.CharField(max_length=20)
@@ -149,7 +151,8 @@ class RouteManager(Manager):
 class Route(models.Model):
     objects = RouteManager()
 
-    agency = models.ForeignKey('Agency', related_name='routes')
+    agency = models.ForeignKey('Agency', related_name='routes',
+                               db_constraint=False)
     short_name = models.CharField(max_length=50)
     long_name = models.CharField(max_length=255)
     type = models.PositiveSmallIntegerField()
@@ -214,10 +217,12 @@ class StopTimeManager(Manager):
 class StopTime(models.Model):
     objects = StopTimeManager()
 
-    trip = models.ForeignKey('Trip', related_name='stop_times')
+    trip = models.ForeignKey('Trip', related_name='stop_times',
+                             db_constraint=False)
     arrival_time = models.TimeField()
     departure_time = models.TimeField()
-    stop = models.ForeignKey('Stop', related_name='stop_times')
+    stop = models.ForeignKey('Stop', related_name='stop_times',
+                             db_constraint=False)
     sequence = models.PositiveSmallIntegerField()
     pickup_type = models.PositiveSmallIntegerField()
     drop_off_type = models.PositiveSmallIntegerField()
@@ -228,8 +233,8 @@ class StopTime(models.Model):
 
 
 class TripManager(Manager):
-    csv_id = 'trip_id'
     csv_mapping = {
+        'id': 'trip_id',
         'route_id': 'route_id',
         'short_name': 'trip_short_name',
         'buyable': bool_field('buyable'),
@@ -237,6 +242,11 @@ class TripManager(Manager):
         'bike': bool_field('bike'),
         'description': 'trip_desc',
     }
+
+    def get_or_create_csv(self, csv):
+        trip = super().get_or_create_csv(csv)
+        cache.delete('trip_%d_stops' % trip.id)
+        return trip
 
 
 class Trip(models.Model):

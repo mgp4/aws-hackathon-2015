@@ -16,7 +16,8 @@ def all_trips_stops(request):
         stops = cache.get(cache_key)
         if not stops:
             stops = []
-            for stop_time in trip.stop_times.all().select_related('stop'):
+            for stop_time in trip.stop_times.order_by('arrival_time').all() \
+                    .select_related('stop'):
                 stops.append((stop_time.stop.lat, stop_time.stop.lon))
             cache.set(cache_key, stops)
         trips.append(stops)
