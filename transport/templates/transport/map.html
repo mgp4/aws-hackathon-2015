@@ -49,8 +49,8 @@ function initMap() {
     }).done(function (cities) {
         var heatmap_data = [];
         $.each(cities, function(_, city) {
-            var lat_lng = new google.maps.LatLng(data[0], data[1]);
-            var weight = data[2];
+            var lat_lng = new google.maps.LatLng(city[0], city[1]);
+            var weight = city[2];
             heatmap_data.push({location: lat_lng, weight});
         });
 

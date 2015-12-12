@@ -21,4 +21,3 @@ def import_places():
         records = json.load(data)
         for r in records:
             models.Place.objects.create(**r)
-            print('.'),
