@@ -245,7 +245,7 @@ class TripManager(Manager):
 
     def get_or_create_csv(self, csv):
         trip = super().get_or_create_csv(csv)
-        cache.delete('trip_%d_stops' % trip.id)
+        cache.delete('trip_%s_stops' % str(trip.id))
         return trip
 
 

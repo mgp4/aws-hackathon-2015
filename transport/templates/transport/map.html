@@ -15,8 +15,8 @@
 
 function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 49.636, lng: 18.148},
-        zoom: 6,
+        center: {lat: 49.636, lng: 16.248},
+        zoom: 7,
     });
 
     $.ajax({
@@ -35,9 +35,9 @@ function initMap() {
             var polyline = new google.maps.Polyline({
                 path: path,
                 geodesic: true,
-                strokeColor: '#FF0000',
-                strokeOpacity: 1.0,
-                strokeWeight: 2,
+                strokeColor: 'blue',
+                strokeOpacity: 0.2,
+                strokeWeight: 0.5,
             });
             polyline.setMap(map);
         });
@@ -56,7 +56,7 @@ function initMap() {
 
         var heatmap = new google.maps.visualization.HeatmapLayer({
             data: heatmap_data,
-            radius: 10
+            radius: 20
         });
         heatmap.setMap(map);
 	});
