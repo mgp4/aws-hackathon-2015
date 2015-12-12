@@ -20,7 +20,7 @@ function initMap() {
     });
 
     $.ajax({
-        url: 'http://aws.dev.garncarz.cz/transport/source/',
+        url: "{% url 'transport:source' %}",
         timeout: 60000,
     }).done(function (data) {
         var routes = data;
