@@ -164,8 +164,8 @@ class StopManager(Manager):
     csv_mapping = {
         'id': 'stop_id',
         'name': 'stop_name',
-        #'lat': 'stop_lat',
-        #'lon': 'stop_lon',
+        'lat': 'stop_lat',
+        'lon': 'stop_lon',
         'wheelchair_boarding': bool_field('wheelchair_boarding'),
         'border': bool_field('border'),
         'description': 'stop_desc',
@@ -182,8 +182,8 @@ class Stop(models.Model):
     objects = StopManager()
 
     name = models.CharField(max_length=255)
-    # stop_lat =
-    # stop_lon =
+    lat = models.DecimalField(max_digits=32, decimal_places=24)
+    lon = models.DecimalField(max_digits=32, decimal_places=24)
     wheelchair_boarding = models.BooleanField()
     border = models.BooleanField()
     description = models.TextField()
