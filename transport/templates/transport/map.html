@@ -43,26 +43,24 @@ function initMap() {
         });
     });
 
-    //  var heatmapData = [
-    //	  {location: new google.maps.LatLng(49.636, 18.148), weight : 9000}, // Pribor
-    //	  {location: new google.maps.LatLng(49.6, 18.168), weight : 19000}, // Koprivnice
-    //	  {location: new google.maps.LatLng(49.593, 18.07), weight : 900}, //Rybi
-    //	  {location: new google.maps.LatLng(49.590, 18.025), weight : 23000} //NJ
-    //	];
+    $.ajax({
+        url: "{% url 'places:source' %}",
+        timeout: 60000,
+    }).done(function (cities) {
+        var heatmap_data = [];
+        $.each(cities, function(_, city) {
+            var lat_lng = new google.maps.LatLng(data[0], data[1]);
+            var weight = data[2];
+            heatmap_data.push({location: lat_lng, weight});
+        });
 
-    //var cities_json = {};
-    //var heatmapData = [];
+        var heatmap = new google.maps.visualization.HeatmapLayer({
+            data: heatmap_data,
+            radius: 10
+        });
+        heatmap.setMap(map);
+	});
 
-    //$.each(cities_json, function (key, data) {	//heatmap
-    //	var latLng = new google.maps.LatLng(data.lat, data.lng);
-    //	var weight = data.total;
-    //
-    //	hetmapData.push({location: latLng, weight});
-    //}
-
-
-    //   var heatmap = new google.maps.visualization.HeatmapLayer({ data: heatmapData, radius: 10 });
-    //   heatmap.setMap(map);
 }
 
         </script>
