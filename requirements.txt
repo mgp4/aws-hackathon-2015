@@ -1,3 +1,4 @@
+awscli==1.9.12
 awsebcli==3.6.1
 blessed==1.9.5
 boto==2.38.0
@@ -22,9 +23,12 @@ pexpect==4.0.1
 pickleshare==0.5
 psycopg2==2.6.1
 ptyprocess==0.5
+pyasn1==0.1.9
 python-dateutil==2.4.2
+python-memcached==1.57
 PyYAML==3.11
 requests==2.6.2
+rsa==3.2.3
 simplegeneric==0.8.1
 six==1.10.0
 texttable==0.8.4
