@@ -15,8 +15,8 @@ if 'AWS_ACCES_KEY_ID' in os.environ:
             'PASSWORD': os.environ['RDS_PASSWORD'],
             'HOST': os.environ['RDS_HOSTNAME'],
             'PORT': os.environ['RDS_PORT'],
-            }
         }
+    }
 
     AWS_STORAGE_BUCKET_NAME = os.environ['S3_BUCKET_NAME']
     AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME

@@ -66,8 +66,8 @@ class CalendarManager(Manager):
         'friday': bool_field('friday'),
         'saturday': bool_field('saturday'),
         'sunday': bool_field('sunday'),
-        'start_date': bool_field('start_date'),
-        'end_date': bool_field('end_date'),
+        'start_date': date_field('start_date'),
+        'end_date': date_field('end_date'),
     }
 
 

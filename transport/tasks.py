@@ -23,17 +23,17 @@ def download_unzip(number):
 
 
 def parse_extracted():
-    csv_mapping = {
-        'agency': models.Agency,
-        'calendar': models.Calendar,
-        'calendar_dates': models.CalendarDate,
-        'departments': models.Department,
-        'routes': models.Route,
-        'stops': models.Stop,
-        'stop_times': models.StopTime,
-        'trips': models.Trip,
-    }
-    for source, target in csv_mapping.items():
+    csv_mapping = [
+        ('agency', models.Agency),
+        ('calendar', models.Calendar),
+        ('calendar_dates', models.CalendarDate),
+        ('departments', models.Department),
+        ('routes', models.Route),
+        ('trips', models.Trip),
+        ('stops', models.Stop),
+        ('stop_times', models.StopTime),
+    ]
+    for source, target in csv_mapping:
         with open('%s/%s.txt' % (EXTRACTED, source)) as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
