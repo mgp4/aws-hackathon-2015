@@ -19,9 +19,6 @@ if 'RDS_DB_NAME' in os.environ:
         }
     }
 
-if 'CACHE_LOCATION' in os.environ:
-    CACHES['default']['LOCATION'] = os.environ['CACHE_LOCATION']
-
 if 'S3_BUCKET_NAME' in os.environ:
     AWS_STORAGE_BUCKET_NAME = os.environ['S3_BUCKET_NAME']
     AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME

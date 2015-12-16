@@ -96,13 +96,19 @@ DATABASES = {
 
 # Cache
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        # 'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-        'LOCATION': '127.0.0.1:11211',
-    },
-}
+if 'CACHE_LOCATION' in os.environ:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': os.environ['CACHE_LOCATION'],
+        },
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        },
+    }
 
 
 # Internationalization
