@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/mgp4/aws-hackathon-2015.svg?branch=master)](https://travis-ci.org/mgp4/aws-hackathon-2015)
+[![Coverage Status](https://coveralls.io/repos/mgp4/aws-hackathon-2015/badge.svg?branch=master&service=github)](https://coveralls.io/github/mgp4/aws-hackathon-2015?branch=master)
+
+
 ## Installation
 
 Needed: Python 3
