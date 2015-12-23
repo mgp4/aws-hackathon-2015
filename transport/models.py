@@ -17,10 +17,10 @@ class Manager(models.Manager):
         obj_dict = {}
         for my_attr, csv_attr in self.csv_mapping.items():
             if callable(csv_attr):
-                value = csv_attr(csv)
+                obj_dict[my_attr] = csv_attr(csv)
             else:
-                value = csv[csv_attr]
-            obj_dict[my_attr] = value
+                if csv_attr in csv:
+                    obj_dict[my_attr] = csv[csv_attr]
         return obj_dict
 
     def get_or_create_csv(self, csv):
@@ -49,10 +49,12 @@ class Agency(models.Model):
 
     name = models.CharField(max_length=255)
     url = models.URLField()
-    timezone = models.CharField(max_length=20)
+    timezone = models.CharField(max_length=32)
     address = models.CharField(max_length=255)
-    phone = models.CharField(max_length=14)
-    email = models.EmailField()
+    phone = models.CharField(max_length=14, null=True, blank=True)
+
+    # extra:
+    email = models.EmailField(null=True, blank=True)
 
     def __str__(self):
         return str(self.name)
@@ -122,6 +124,8 @@ class DepartmentManager(Manager):
 
 
 class Department(models.Model):
+    # this whole class is extra
+
     objects = DepartmentManager()
 
     agency = models.ForeignKey('Agency', related_name='departments',
@@ -152,11 +156,12 @@ class Route(models.Model):
     objects = RouteManager()
 
     agency = models.ForeignKey('Agency', related_name='routes',
+                               null=True, blank=True,
                                db_constraint=False)
-    short_name = models.CharField(max_length=50)
-    long_name = models.CharField(max_length=255)
+    short_name = models.CharField(max_length=50, null=True, blank=True)
+    long_name = models.CharField(max_length=255, null=True, blank=True)
     type = models.PositiveSmallIntegerField()
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return str(self.short_name)
@@ -169,7 +174,7 @@ class StopManager(Manager):
         'name': 'stop_name',
         'lat': 'stop_lat',
         'lon': 'stop_lon',
-        'wheelchair_boarding': bool_field('wheelchair_boarding'),
+        'wheelchair_boarding': 'wheelchair_boarding',
         'border': bool_field('border'),
         'description': 'stop_desc',
         'gps_of_city': bool_field('gps_of_city'),
@@ -187,11 +192,14 @@ class Stop(models.Model):
     name = models.CharField(max_length=255)
     lat = models.DecimalField(max_digits=32, decimal_places=24)
     lon = models.DecimalField(max_digits=32, decimal_places=24)
-    wheelchair_boarding = models.BooleanField()
-    border = models.BooleanField()
-    description = models.TextField()
-    gps_of_city = models.BooleanField()
-    timezone = models.CharField(max_length=20)
+    wheelchair_boarding = models.PositiveSmallIntegerField(null=True,
+                                                           blank=True)
+    description = models.TextField(null=True, blank=True)
+    timezone = models.CharField(max_length=32, null=True, blank=True)
+
+    # extra:
+    border = models.BooleanField()  # ???
+    gps_of_city = models.BooleanField()  # ???
     district = models.CharField(max_length=50)
     region = models.CharField(max_length=50)
     country = models.CharField(max_length=30)
@@ -219,14 +227,18 @@ class StopTime(models.Model):
 
     trip = models.ForeignKey('Trip', related_name='stop_times',
                              db_constraint=False)
-    arrival_time = models.TimeField()
-    departure_time = models.TimeField()
+
+    # FIXME times can be > 24:00
+    arrival_time = models.TimeField(null=True, blank=True)
+    departure_time = models.TimeField(null=True, blank=True)
+
     stop = models.ForeignKey('Stop', related_name='stop_times',
                              db_constraint=False)
     sequence = models.PositiveSmallIntegerField()
-    pickup_type = models.PositiveSmallIntegerField()
-    drop_off_type = models.PositiveSmallIntegerField()
-    shape_dist_travelled = models.PositiveSmallIntegerField()
+    pickup_type = models.PositiveSmallIntegerField(null=True, blank=True)
+    drop_off_type = models.PositiveSmallIntegerField(null=True, blank=True)
+    shape_dist_travelled = models.DecimalField(null=True, blank=True,
+                                               max_digits=6, decimal_places=2)
 
     def __str__(self):
         return '%s (%s)' % (self.trip, self.arrival_time)
@@ -238,7 +250,7 @@ class TripManager(Manager):
         'route_id': 'route_id',
         'short_name': 'trip_short_name',
         'buyable': bool_field('buyable'),
-        'wheelchair_accessible': bool_field('wheelchair_accessible'),
+        'wheelchair_accessible': 'wheelchair_accessible',
         'bike': bool_field('bike'),
         'description': 'trip_desc',
     }
@@ -254,10 +266,13 @@ class Trip(models.Model):
 
     route = models.ForeignKey('Route', related_name='trips')
     # service = models.ForeignKey('Service', related_name='trips')
-    short_name = models.CharField(max_length=30)
+    short_name = models.CharField(max_length=30, null=True, blank=True)
+    wheelchair_accessible = models.PositiveSmallIntegerField(null=True,
+                                                             blank=True)
+
+    # extra:
+    bike = models.BooleanField()  # isn't it official bikes_allowed?
     buyable = models.BooleanField()
-    wheelchair_accessible = models.BooleanField()
-    bike = models.BooleanField()
     description = models.TextField()
 
     def __str__(self):
